@@ -22,8 +22,13 @@ server.use(helmet());
 server.use(express.json());
 
 // server
-server.get('/', (req, res) => {
-  res.status(200).json({ messageOfTheDay: process.env.MOTD });
+server.get('/', async (req, res) => {
+  try {
+    res.status(200).json({ messageOfTheDay: process.env.MOTD });
+  } catch (error) {
+    console.error('\nERROR', error);
+    res.status(500).json({ error: 'Cannot retrieve the data.' });
+  }
 });
 
 server.use('/api/users', userRouter);
